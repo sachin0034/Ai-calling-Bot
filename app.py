@@ -6,7 +6,7 @@ import requests
 API_KEY = "sk-j7yf7sf02y12oh0pyiet5k2663t6jbvfcehzmdlv7xu3xo36og8ad4o8weob94ts69"
 
 # Logo image
-logo_image = "Techavtar Favicon.png"
+logo_image = "logo.jpg"
 
 # Hint prompt
 hint_prompt = """
