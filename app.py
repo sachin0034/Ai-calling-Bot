@@ -3,8 +3,7 @@ import pandas as pd
 import requests
 
 # Define the API key
-API_KEY = os.getenv("API_KEY")
-
+API_KEY = st.secret("API Key")
 # Logo image
 logo_image = "logo.jpg"
 
