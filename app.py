@@ -26,7 +26,7 @@ def main():
     
     st.sidebar.image(logo_image, width=100, use_column_width='always')  # Adding logo with glow effect
     
-    option = st.sidebar.selectbox("Select an option", ["Single Call", "Bulk Call", "Call Details"])
+    option = st.sidebar.selectbox("Select an option", ["Single Call", "Bulk Call", "Call Details", "Call Logs"])
 
     # Display hint prompt
     if st.button("Hint Prompt"):
@@ -39,6 +39,8 @@ def main():
         bulk_call()
     elif option == "Call Details":
         call_details()
+    elif option == "Call Logs":
+        call_logs()
 
 # Function to make a single call
 def single_call():
@@ -74,6 +76,15 @@ def call_details():
                 for transcript in response["transcripts"]:
                     st.write(f"{transcript['user']}: {transcript['text']}")
 
+# Function to fetch call logs
+def call_logs():
+    st.subheader("Call Logs")
+    response = fetch_call_logs_api()
+
+    if response:
+        df = pd.json_normalize(response["calls"])
+        st.write(df)
+
 # Function to make a single call using API
 def make_single_call_api(phone_number, task):
     headers = {"Authorization": API_KEY}
@@ -108,6 +119,17 @@ def fetch_call_details_api(call_id):
         return response.json()
     else:
         st.error("Failed to fetch call details.")
+        return None
+
+# Function to fetch call logs using API
+def fetch_call_logs_api():
+    url = "https://api.bland.ai/v1/calls"
+    headers = {"Authorization": API_KEY}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        st.error("Failed to fetch call logs.")
         return None
 
 if __name__ == "__main__":
