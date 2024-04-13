@@ -88,7 +88,7 @@ def call_logs():
 # Function to make a single call using API
 def make_single_call_api(phone_number, task):
     headers = {"Authorization": API_KEY}
-    data = {"phone_number": phone_number, "task": task, "transfer_phone_number": "+91 7667244137"}
+    data = {"phone_number": phone_number, "task": task, "voice": "e1289219-0ea2-4f22-a994-c542c2a48a0f", "transfer_phone_number": "+91 7667244137"}
     response = requests.post("https://api.bland.ai/v1/calls", data=data, headers=headers)
     st.write(response.json())
     return response
