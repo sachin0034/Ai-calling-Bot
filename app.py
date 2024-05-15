@@ -22,7 +22,7 @@ hint_prompt = """
 
 # Main Streamlit app
 def main():
-    st.title("Techavtar AI Call Interface")
+    st.title("AI Call")
     
     st.sidebar.image(logo_image, width=100, use_column_width='always')  # Adding logo with glow effect
     
