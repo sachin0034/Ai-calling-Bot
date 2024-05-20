@@ -1,10 +1,13 @@
+import os
+from dotenv import load_dotenv
 import streamlit as st
 import pandas as pd
 import requests
 
-# Define the API key
-API_KEY = "sk-j7yf7sf02y12oh0pyiet5k2663t6jbvfcehzmdlv7xu3xo36og8ad4o8weob94ts69"
+load_dotenv()
 
+# Define the API key
+API_KEY = os.getenv("API_KEY")
 # Logo image
 logo_image = "Screenshot (959).png"
 
