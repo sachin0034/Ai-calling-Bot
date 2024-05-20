@@ -47,18 +47,20 @@ def single_call():
     st.subheader("Single Call")
     phone_number = st.text_input("Enter Phone Number")
     task = st.text_area("Enter task prompt")
+    transfer_phone_number = st.text_input("Enter the Transfer Phone Number")
     make_call_button = st.button("Make Call")
-    if make_call_button and phone_number and task:
-        response = make_single_call_api(phone_number, task)
+    if make_call_button and phone_number and task and transfer_phone_number:
+        response = make_single_call_api(phone_number, task,transfer_phone_number)
 
-# Function to make bulk calls
+# Function to make bulk calls 
 def bulk_call():
     st.subheader("Bulk Call")
     uploaded_file = st.file_uploader("Upload CSV File", type=["csv"])
     task = st.text_area("Enter task prompt")
+    transfer_phone_number = st.text_input("Enter the Transfer Phone Number")
     make_bulk_call_button = st.button("Make Bulk Call")
-    if make_bulk_call_button and uploaded_file is not None and task:
-        response = make_bulk_call_api(uploaded_file, task)
+    if make_bulk_call_button and uploaded_file is not None and task and transfer_phone_number:
+        response = make_bulk_call_api(uploaded_file, task,transfer_phone_number)
 
 # Function to fetch call details
 def call_details():
@@ -86,22 +88,22 @@ def call_logs():
         st.write(df)
 
 # Function to make a single call using API
-def make_single_call_api(phone_number, task):
+def make_single_call_api(phone_number, task, transfer_phone_number):
     headers = {"Authorization": API_KEY}
-    data = {"phone_number": phone_number, "task": task, "voice": "e1289219-0ea2-4f22-a994-c542c2a48a0f", "transfer_phone_number": "+91 7667244137"}
+    data = {"phone_number": phone_number, "task": task, "voice": "e1289219-0ea2-4f22-a994-c542c2a48a0f", "transfer_phone_number": transfer_phone_number}
     response = requests.post("https://api.bland.ai/v1/calls", data=data, headers=headers)
     st.write(response.json())
     return response
 
 # Function to make bulk calls using API
-def make_bulk_call_api(uploaded_file, task):
+def make_bulk_call_api(uploaded_file, task, transfer_phone_number):
     headers = {"Authorization": API_KEY}
     try:
         df = pd.read_csv(uploaded_file)
         if "Phone Number" in df.columns:
             phone_numbers = df["Phone Number"].tolist()
             for phone_number in phone_numbers:
-                data = {"phone_number": phone_number, "task": task, "transfer_phone_number": "+91 7667244137"}
+                data = {"phone_number": phone_number, "task": task, "transfer_phone_number": transfer_phone_number}
                 response = requests.post("https://api.bland.ai/v1/calls", data=data, headers=headers)
                 st.write(response.json())  # You can modify this to handle the responses as needed
             return response
