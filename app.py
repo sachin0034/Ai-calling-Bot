@@ -29,7 +29,7 @@ def main():
     
     st.sidebar.image(logo_image, width=100, use_column_width='always')  # Adding logo with glow effect
     
-    option = st.sidebar.selectbox("Select an option", ["Single Call", "Bulk Call", "Call Details", "Call Logs"])
+    option = st.sidebar.radio("Select an option", ["Single Call", "Bulk Call", "Call Details", "Call Logs"])
 
     # Display hint prompt
     if st.button("Hint Prompt"):
