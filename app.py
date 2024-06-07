@@ -9,7 +9,7 @@ load_dotenv()
 # Define the API key
 API_KEY = os.getenv("API_KEY")
 # Logo image
-logo_image = "Screenshot (959).png"
+logo_image = "Techavtar Favicon.png"
 
 # Hint prompt
 hint_prompt = """
@@ -53,7 +53,7 @@ def single_call():
     transfer_phone_number = st.text_input("Enter the Transfer Phone Number")
     make_call_button = st.button("Make Call")
     if make_call_button and phone_number and task and transfer_phone_number:
-        response = make_single_call_api(phone_number, task,transfer_phone_number)
+        response = make_single_call_api(phone_number, task, transfer_phone_number)
 
 # Function to make bulk calls 
 def bulk_call():
@@ -63,7 +63,7 @@ def bulk_call():
     transfer_phone_number = st.text_input("Enter the Transfer Phone Number")
     make_bulk_call_button = st.button("Make Bulk Call")
     if make_bulk_call_button and uploaded_file is not None and task and transfer_phone_number:
-        response = make_bulk_call_api(uploaded_file, task,transfer_phone_number)
+        response = make_bulk_call_api(uploaded_file, task, transfer_phone_number)
 
 # Function to fetch call details
 def call_details():
@@ -103,15 +103,35 @@ def make_bulk_call_api(uploaded_file, task, transfer_phone_number):
     headers = {"Authorization": API_KEY}
     try:
         df = pd.read_csv(uploaded_file)
-        if "Phone Number" in df.columns:
-            phone_numbers = df["Phone Number"].tolist()
-            for phone_number in phone_numbers:
-                data = {"phone_number": phone_number, "task": task, "transfer_phone_number": transfer_phone_number}
+        if "Phone" in df.columns and "Cell Phone" in df.columns:
+            for index, row in df.iterrows():
+                phone_number = row["Phone"] if pd.notna(row["Phone"]) else row["Cell Phone"]
+                task_prompt = task.format(
+                    first_name=row["First Name"],
+                    last_name=row["Last Name"],
+                    address1=row["Address 1"],
+                    address2=row["Address 2"],
+                    city=row["City"],
+                    state=row["ST"],
+                    zip=row["ZIP"],
+                    purchase_date=row["Purchase Date"],
+                    purchase_amount=row["Purchase Amount"],
+                    email=row["Email Address"],
+                    est_home_value=row["Est. Home Value"],
+                    building_sq_ft_indicator=row["Building Square Feet Indicator"],
+                    year_built=row["Year Built"],
+                    gross_sq_ft=row["Gross Square Feet"],
+                    building_sq_ft=row["Building Square Feet"],
+                    sale_date=row["Sale Date"],
+                    zip_code4=row["Zip Code 4"],
+                    square_footage=row["Square Footage"]
+                )
+                data = {"phone_number": phone_number, "task": task_prompt, "transfer_phone_number": transfer_phone_number}
                 response = requests.post("https://api.bland.ai/v1/calls", data=data, headers=headers)
                 st.write(response.json())  # You can modify this to handle the responses as needed
             return response
         else:
-            st.error("Column 'Phone Number' not found in the uploaded file.")
+            st.error("Columns 'Phone' or 'Cell Phone' not found in the uploaded file.")
     except Exception as e:
         st.error(f"Error: {e}")
 
