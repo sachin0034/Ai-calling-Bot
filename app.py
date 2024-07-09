@@ -9,7 +9,7 @@ load_dotenv()
 # Define the API key
 API_KEY = os.getenv("API_KEY")
 # Logo image
-# logo_image = "Techavtar Favicon.png"
+logo_image = "Techavtar Favicon.png"
 
 # Hint prompt
 hint_prompt = """
